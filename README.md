@@ -196,7 +196,7 @@ fits the filter.
 
 ## Known issues
 
-Currently idea IDEs refuse to autocomplete anything imported from this package and mark any usages as unresolvable.  
+Currently, idea IDEs refuse to autocomplete anything imported from this package and mark any usages as unresolvable.  
 If someone knows how to fix that, help would be very appreciated.
 
 This library was build for a specific dataset, following yagni (you aren't gonna need it) principles to some
