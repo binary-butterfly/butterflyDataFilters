@@ -16,7 +16,7 @@ the open source community in hopes that someone else may benefit from it as well
 For direct examples, check out src/__tests__/filterHelper.jest.js since it shows all ways the filters can be used.
 
 * Install the library using `npm save --dev butterfly-data-filters`
-* Import `applyFilters` from `butterfly-data-filters`
+* Add `import {applyFilters} from 'butterfly-data-filters';` where you want to use the filters
   * You can also import `availableFilterTypes`, which is a list of all types supported.
     * This list may be useful for validation before calling the filters or within React PropTypes
 * Build your filters like in the examples below and combine them into a single array
@@ -195,6 +195,9 @@ fits the filter.
 ```
 
 ## Known issues
+
+Currently idea IDEs refuse to autocomplete anything imported from this package and mark any usages as unresolvable.  
+If someone knows how to fix that, help would be very appreciated.
 
 This library was build for a specific dataset, following yagni (you aren't gonna need it) principles to some
 extent.  
