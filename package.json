@@ -1,0 +1,55 @@
+{
+  "name": "butterfly-data-filters",
+  "version": "0.0.1",
+  "license": "MIT",
+  "private": false,
+  "main": "dist/filterHelper.js",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/binary-butterfly/butterflyDataFilters.git"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "prepublishOnly": "webpack --mode=production",
+    "test": "jest",
+    "coverage": "jest --collectCoverage"
+  },
+  "jest": {
+    "verbose": true
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10",
+    "@babel/preset-env": "^7.10",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.37.0",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^3.11.2",
+    "jest": "^27.0.6"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "IE >= 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/binary-butterfly/butterflyDataFilters/issues"
+  },
+  "homepage": "https://github.com/binary-butterfly/butterflyDataFilters#readme",
+  "description": "A simple library for filtering data in JavaScript",
+  "keywords": [
+    "data",
+    "filters"
+  ],
+  "author": "binary butterfly GmbH"
+}
