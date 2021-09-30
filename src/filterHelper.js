@@ -34,11 +34,11 @@ const checkDateRangeFilter = (filter, value) => {
             break;
         case ('month'):
             from = new Date(year, month, 1, 0, 0, 0, 0);
-            until = new Date(year, month + 1, 0, 0, 0, 0, 0);
+            until = new Date(year, month + 1, 1, 0, 0, 0, 0);
             break;
         case ('last_month'):
             from = new Date(year, month - 1, 1, 0, 0, 0, 0);
-            until = new Date(year, month, 0, 0, 0, 0, 0);
+            until = new Date(year, month, 1, 0, 0, 0, 0);
             break;
         case ('custom'):
             from = new Date(filter.data.from);
