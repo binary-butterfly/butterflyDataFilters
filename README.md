@@ -149,7 +149,8 @@ Use this filter to search for datasets that have a falsy value as searchField
 ### Existence check filters
 Use this filter to search for datasets that have any value set (or no value at all) for searchField.  
 Note that this filter overrides the `skipUnset` param.
-```{
+```
+{
     'field': 'test',
     'type': 'existence',
     'value': true,
