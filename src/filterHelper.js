@@ -143,11 +143,11 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
             break;
         case ('existence'):
             if (typeof filter.value === 'boolean') {
-                if (filter.value === false && value !== null || (filter.value === true && value === '')) {
+                if ((filter.value === false && !(value === null || value === '')) || (filter.value === true && value === '')) {
                     return false;
                 }
             } else if (filter.value.length === 1) {
-                if ( filter.value[0] === false && value !== null || (filter.value[0] === true && value === '')) {
+                if ((filter.value[0] === false && !(value === null || value === '')) || (filter.value[0] === true && value === '')) {
                     return false;
                 }
             }
