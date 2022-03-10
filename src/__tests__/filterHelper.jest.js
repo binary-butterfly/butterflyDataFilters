@@ -643,7 +643,7 @@ describe.each([
             },
         ],
         [
-            {'test': true}, {'banana': false},
+            {'test': true}, {'banana': false}, {'test': ''}
         ],
         [
             {'test': true},

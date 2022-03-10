@@ -6,7 +6,7 @@ const convertIntoDateIfNotObject = (value) => {
 const numSafeToLowerCase = (input) => {
     input += '';
     return input.toLowerCase();
-}
+};
 
 const checkDateRangeFilter = (filter, value) => {
     let from;
@@ -142,10 +142,14 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
             }
             break;
         case ('existence'):
-            if (typeof filter.value === 'boolean' && filter.value === false && value !== null) {
-                return false;
-            } else if (filter.value.length === 1 && filter.value[0] === false && value !== null) {
-                return false;
+            if (typeof filter.value === 'boolean') {
+                if (filter.value === false && value !== null || (filter.value === true && value === '')) {
+                    return false;
+                }
+            } else if (filter.value.length === 1) {
+                if ( filter.value[0] === false && value !== null || (filter.value[0] === true && value === '')) {
+                    return false;
+                }
             }
             break;
         case('childAttr'):
