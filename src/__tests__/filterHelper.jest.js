@@ -244,23 +244,6 @@ describe.each([
             {
                 'field': 'date',
                 'type': 'dateRange',
-                'value': 'not implemented',
-            },
-        ],
-        [
-            {'date': now},
-            {'date': new Date('2020-01-01')},
-        ],
-        [
-            {'date': now}, {'date': new Date('2020-01-01')},
-        ],
-        'DateRange skipped when value not implemented',
-    ],
-    [
-        [
-            {
-                'field': 'date',
-                'type': 'dateRange',
                 'value': 'yesterday',
             },
         ],
@@ -371,9 +354,33 @@ describe.each([
     ],
 ])('test date filter', (filters, values, expected, name) => {
     test(name, () => {
-        global.console.error = jest.fn();
         expect(applyFilters(filters, values, false)).toStrictEqual(expected);
     });
+});
+
+test('test date filter DateRange skipped when value not implemented', () => {
+    const error = jest.fn();
+    global.console.error = error;
+    expect(
+        applyFilters([
+                {
+                    'field': 'date',
+                    'type': 'dateRange',
+                    'value': 'not implemented',
+                },
+            ],
+            [
+                {'date': now},
+                {'date': new Date('2020-01-01')},
+            ],
+        ))
+        .toStrictEqual(
+            [
+                {'date': now},
+                {'date': new Date('2020-01-01')},
+            ],
+        );
+    expect(error).toHaveBeenCalledTimes(2);
 });
 
 describe.each([
@@ -398,21 +405,6 @@ describe.each([
             {child: {test: 'foo'}},
         ],
         'works as intended',
-    ],
-    [
-        [
-            {
-                'field': 'child',
-                'type': 'childAttr',
-            },
-        ],
-        [
-            {child: {test: 'foo'}}, {child: {'test': 'apple'}},
-        ],
-        [
-            {child: {test: 'foo'}}, {child: {'test': 'apple'}},
-        ],
-        'skipped when no data is set',
     ],
     [
         [
@@ -444,9 +436,27 @@ describe.each([
     ],
 ])('test childAttr filter', (filters, values, expected, name) => {
     test(name, () => {
-        global.console.warn = jest.fn();
         expect(applyFilters(filters, values, false)).toStrictEqual(expected);
     });
+});
+
+test('test childAttr filter is skipped when no data is set', () => {
+    const warn = jest.fn();
+    global.console.warn = warn;
+    expect(
+        applyFilters([
+                {
+                    'field': 'child',
+                    'type': 'childAttr',
+                },
+            ],
+            [
+                {child: {test: 'foo'}}, {child: {'test': 'apple'}},
+            ]))
+        .toStrictEqual([
+            {child: {test: 'foo'}}, {child: {'test': 'apple'}},
+        ]);
+    expect(warn).toHaveBeenCalledTimes(2);
 });
 
 describe.each([
@@ -470,28 +480,31 @@ describe.each([
         [
             {children: [{test: 'foo'}, {test: 'banana'}]},
         ],
-        'ChildArrayAttr filter',
-    ],
-    [
-        [
-            {
-                'field': 'children',
-                'type': 'childArrayAttr',
-            },
-        ],
-        [
-            {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
-        ],
-        [
-            {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
-        ],
-        'ChildArrayAttr filter is skipped when data not set',
+        'works as intended',
     ],
 ])('test childArrayAttr filter', (filters, values, expected, name) => {
     test(name, () => {
-        global.console.warn = jest.fn();
         expect(applyFilters(filters, values, false)).toStrictEqual(expected);
     });
+});
+
+test('test childArrayAttr filter is skipped when no data set', () => {
+    const warn = jest.fn();
+    global.console.warn = warn;
+    expect(
+        applyFilters([
+                {
+                    'field': 'children',
+                    'type': 'childArrayAttr',
+                },
+            ],
+            [
+                {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
+            ]))
+        .toStrictEqual([
+            {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
+        ]);
+    expect(warn).toHaveBeenCalledTimes(2);
 });
 
 describe.each([
@@ -635,7 +648,7 @@ describe.each([
         [
             {'test': true},
         ],
-        'Existence filter with bool value true',
+        'bool value true',
     ],
     [
         [
@@ -651,7 +664,7 @@ describe.each([
         [
             {'banana': false},
         ],
-        'Existence filter with bool value false',
+        'bool value false',
     ],
     [
         [
@@ -667,7 +680,7 @@ describe.each([
         [
             {'banana': false},
         ],
-        'Existence filter with array value false',
+        'array value false',
     ],
     [
         [
@@ -683,7 +696,7 @@ describe.each([
         [
             {'test': true},
         ],
-        'Existence filter with array value true',
+        'array value true',
     ],
     [
         [
@@ -699,7 +712,7 @@ describe.each([
         [
             {'test': true}, {'banana': false},
         ],
-        'Existence filter with array value all allowed',
+        'array value all allowed',
     ],
     [
         [
@@ -715,7 +728,7 @@ describe.each([
         [
             {'test': true}, {'banana': false},
         ],
-        'Existence filter with array value _any all allowed',
+        'array value _any all allowed',
     ],
 ])('Test existence filters', (filters, values, expected, name) => {
     test(name, () => {
