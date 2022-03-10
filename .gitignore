@@ -2,5 +2,6 @@
 .DS_STORE
 
 coverage/
+reports/
 node_modules/
 dist/
