@@ -643,7 +643,7 @@ describe.each([
             },
         ],
         [
-            {'test': true}, {'banana': false}, {'test': ''}
+            {'test': true}, {'banana': false}, {'test': ''},
         ],
         [
             {'test': true},
@@ -659,10 +659,10 @@ describe.each([
             },
         ],
         [
-            {'test': true}, {'banana': false},
+            {'test': true}, {'banana': false}, {'test': ''},
         ],
         [
-            {'banana': false},
+            {'banana': false}, {'test': ''},
         ],
         'bool value false',
     ],
@@ -675,10 +675,10 @@ describe.each([
             },
         ],
         [
-            {'test': true}, {'banana': false},
+            {'test': true}, {'banana': false}, {'test': ''},
         ],
         [
-            {'banana': false},
+            {'banana': false}, {'test': ''},
         ],
         'array value false',
     ],
@@ -691,7 +691,7 @@ describe.each([
             },
         ],
         [
-            {'test': true}, {'banana': false},
+            {'test': true}, {'banana': false}, {'test': ''}
         ],
         [
             {'test': true},
