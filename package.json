@@ -14,11 +14,8 @@
   ],
   "scripts": {
     "prepublishOnly": "webpack --mode=production",
-    "test": "jest",
-    "coverage": "jest --collectCoverage"
-  },
-  "jest": {
-    "verbose": true
+    "test": "jest --config jest.config.js",
+    "coverage": "jest --collectCoverage --config jest.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.10",
