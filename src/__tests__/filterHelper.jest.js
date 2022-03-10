@@ -3,6 +3,52 @@ import {applyFilters} from '../filterHelper';
 const now = new Date();
 describe.each([
     [[], [], true, [], 'Empty stays empty'],
+    [
+        [
+            {
+                'field': 'banana',
+                'type': 'string',
+                'value': 'App',
+            },
+            {
+                'field': 'computer',
+                'type': 'array',
+                'value': ['weird', 'apple'],
+            },
+        ],
+        [{'banana': 'apple', 'computer': 'weird'}, {'banana': 'weird', 'computer': 'apple'}],
+        false,
+        [{'banana': 'apple', 'computer': 'weird'}],
+        'All filters have to match',
+    ],
+])('Test shared features', (filters, values, skipUndefined, expected, name) => {
+    test(name, () => {
+        expect(applyFilters(filters, values, skipUndefined)).toStrictEqual(expected);
+    });
+});
+
+test('Test non implemented filter is skipped with warning', () => {
+    const warn = jest.fn();
+    global.console.warn = warn;
+    expect(applyFilters([
+                {
+                    'field': 'banana',
+                    'type': 'not implemented',
+                    'value': 'foobar',
+                },
+            ],
+            [
+                {'banana': 'test'},
+            ],
+            false),
+    )
+        .toStrictEqual([
+            {'banana': 'test'},
+        ]);
+    expect(warn).toHaveBeenCalledTimes(1);
+});
+
+describe.each([
     [[{
         field: 'foo',
         value: 'bar',
@@ -92,6 +138,13 @@ describe.each([
         [{'banana': 'aPple', 'computer': 'weird'}],
         'String matches case insensitive',
     ],
+])('Test string filters', (filters, values, skipUndefined, expected, name) => {
+    test(name, () => {
+        expect(applyFilters(filters, values, skipUndefined)).toStrictEqual(expected);
+    });
+});
+
+describe.each([
     [
         [
             {
@@ -101,7 +154,6 @@ describe.each([
             },
         ],
         [{'banana': 'apple', 'computer': 'weird'}, {'banana': 'weird', 'computer': 'apple'}],
-        false,
         [{'banana': 'apple', 'computer': 'weird'}, {'banana': 'weird', 'computer': 'apple'}],
         'Array filter skipped when value = ["_any"]',
     ],
@@ -117,28 +169,16 @@ describe.each([
             'banana': 'apple',
             'computer': 'broken',
         }],
-        false,
         [{'banana': 'apple', 'computer': 'weird'}, {'banana': 'weird', 'computer': 'apple'}],
         'Array matches',
     ],
-    [
-        [
-            {
-                'field': 'banana',
-                'type': 'string',
-                'value': 'App',
-            },
-            {
-                'field': 'computer',
-                'type': 'array',
-                'value': ['weird', 'apple'],
-            },
-        ],
-        [{'banana': 'apple', 'computer': 'weird'}, {'banana': 'weird', 'computer': 'apple'}],
-        false,
-        [{'banana': 'apple', 'computer': 'weird'}],
-        'All filters have to match',
-    ],
+])('test array filter', (filters, values, expected, name) => {
+    test(name, () => {
+        expect(applyFilters(filters, values, false)).toStrictEqual(expected);
+    });
+});
+
+describe.each([
     [
         [
             {
@@ -151,7 +191,6 @@ describe.each([
             {'date': '2021-01-01'},
             {'date': '2020-01-01'},
         ],
-        false,
         [{'date': '2021-01-01'}],
         'Min date with string date',
     ],
@@ -167,7 +206,6 @@ describe.each([
             {'date': new Date('2021-01-01')},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [{'date': new Date('2021-01-01')}],
         'Min date with date object',
     ],
@@ -183,7 +221,6 @@ describe.each([
             {'date': new Date('2021-01-02')},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [{'date': new Date('2020-01-01')}],
         'Max date',
     ],
@@ -199,7 +236,6 @@ describe.each([
             {'date': now},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [{'date': now}],
         'DateRange today',
     ],
@@ -215,7 +251,6 @@ describe.each([
             {'date': now},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [
             {'date': now}, {'date': new Date('2020-01-01')},
         ],
@@ -233,7 +268,6 @@ describe.each([
             {'date': new Date(now.getTime() - 8.64e+7)},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [{'date': new Date(now.getTime() - 8.64e+7)}],
         'DateRange yesterday',
     ],
@@ -250,7 +284,6 @@ describe.each([
             {'date': new Date(now.getTime() - 8.64e+7)},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [{'date': now}, {'date': new Date(now.getTime() - 8.64e+7)}],
         'DateRange last 7 days',
     ],
@@ -268,7 +301,6 @@ describe.each([
             {'date': new Date(now.getFullYear(), now.getMonth(), 1, 12, 30)},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [
             {'date': now},
             {'date': new Date(now.getFullYear(), now.getMonth() + 1, 0, 12, 30)},
@@ -290,7 +322,6 @@ describe.each([
             {'date': new Date(now.getFullYear(), now.getMonth() - 1, 1, 12, 30)},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [
             {'date': new Date(now.getFullYear(), now.getMonth(), 0, 12, 30)},
             {'date': new Date(now.getFullYear(), now.getMonth() - 1, 1, 12, 30)},
@@ -314,7 +345,6 @@ describe.each([
             {'date': '2020-01-31'},
             {'date': '2021-01-01'},
         ],
-        false,
         [
             {'date': '2020-01-01'},
             {'date': '2020-01-31'},
@@ -333,234 +363,20 @@ describe.each([
             {'date': new Date('2021-01-01')},
             {'date': new Date('2020-01-01')},
         ],
-        false,
         [
             {'date': new Date('2021-01-01')},
             {'date': new Date('2020-01-01')},
         ],
         'DateRange check skipped if value = _any',
     ],
-    [
-        [
-            {
-                'field': 'num',
-                'type': 'minNum',
-                'value': 1,
-            },
-        ],
-        [
-            {'num': 0}, {'num': 1}, {'num': 1000},
-        ],
-        false,
-        [
-            {'num': 1},
-            {'num': 1000},
-        ],
-        'MinNum',
-    ],
-    [
-        [
-            {
-                'field': 'num',
-                'type': 'minNumber',
-                'value': 1,
-            },
-        ],
-        [
-            {'num': 0}, {'num': 1}, {'num': 1000},
-        ],
-        false,
-        [
-            {'num': 1},
-            {'num': 1000},
-        ],
-        'MinNumber behaves just like minNum',
-    ],
-    [
-        [
-            {
-                'field': 'num',
-                'type': 'maxNum',
-                'value': 1,
-            },
-        ],
-        [
-            {'num': 0}, {'num': 1}, {'num': 1000},
-        ],
-        false,
-        [
-            {'num': 0}, {'num': 1},
-        ],
-        'MaxNum',
-    ],
-    [
-        [
-            {
-                'field': 'num',
-                'type': 'maxNumber',
-                'value': 1,
-            },
-        ],
-        [
-            {'num': 0}, {'num': 1}, {'num': 1000},
-        ],
-        false,
-        [
-            {'num': 0}, {'num': 1},
-        ],
-        'MaxNumber behaves just like maxNum',
-    ],
-    [
-        [
-            {
-                'field': 'bool',
-                'type': 'strict',
-                'value': false,
-            },
-        ],
-        [
-            {'bool': true}, {'bool': false}, {'bool': 'banana'}, {'bool': 'true'},
-        ],
-        false,
-        [
-            {'bool': false},
-        ],
-        'Strict equality',
-    ],
-    [
-        [
-            {
-                'field': 'bool',
-                'type': 'laxTrue',
-            },
-        ],
-        [
-            {'bool': true}, {'bool': false}, {'bool': 'banana'}, {'bool': 'true'}, {'bool': null},
-        ],
-        false,
-        [
-            {'bool': true}, {'bool': 'banana'}, {'bool': 'true'},
-        ],
-        'Lax true',
-    ],
-    [
-        [
-            {
-                'field': 'bool',
-                'type': 'laxFalse',
-            },
-        ],
-        [
-            {'bool': true}, {'bool': false}, {'bool': 'banana'}, {'bool': 'true'}, {'bool': null}, {'bool': 'false'},
-        ],
-        false,
-        [
-            {'bool': false}, {'bool': null},
-        ],
-        'Lax false',
-    ],
-    [
-        [
-            {
-                'field': 'test',
-                'type': 'existence',
-                'value': true,
-            },
-        ],
-        [
-            {'test': true}, {'banana': false},
-        ],
-        false,
-        [
-            {'test': true},
-        ],
-        'Existence filter with bool value true',
-    ],
-    [
-        [
-            {
-                'field': 'test',
-                'type': 'existence',
-                'value': false,
-            },
-        ],
-        [
-            {'test': true}, {'banana': false},
-        ],
-        false,
-        [
-            {'banana': false},
-        ],
-        'Existence filter with bool value false',
-    ],
-    [
-        [
-            {
-                'field': 'test',
-                'type': 'existence',
-                'value': [false],
-            },
-        ],
-        [
-            {'test': true}, {'banana': false},
-        ],
-        false,
-        [
-            {'banana': false},
-        ],
-        'Existence filter with array value false',
-    ],
-    [
-        [
-            {
-                'field': 'test',
-                'type': 'existence',
-                'value': [true],
-            },
-        ],
-        [
-            {'test': true}, {'banana': false},
-        ],
-        false,
-        [
-            {'test': true},
-        ],
-        'Existence filter with array value true',
-    ],
-    [
-        [
-            {
-                'field': 'test',
-                'type': 'existence',
-                'value': [true, false],
-            },
-        ],
-        [
-            {'test': true}, {'banana': false},
-        ],
-        false,
-        [
-            {'test': true}, {'banana': false},
-        ],
-        'Existence filter with array value all allowed',
-    ],
-    [
-        [
-            {
-                'field': 'test',
-                'type': 'existence',
-                'value': ['_any'],
-            },
-        ],
-        [
-            {'test': true}, {'banana': false},
-        ],
-        false,
-        [
-            {'test': true}, {'banana': false},
-        ],
-        'Existence filter with array value _any all allowed',
-    ],
+])('test date filter', (filters, values, expected, name) => {
+    test(name, () => {
+        global.console.error = jest.fn();
+        expect(applyFilters(filters, values, false)).toStrictEqual(expected);
+    });
+});
+
+describe.each([
     [
         [
             {
@@ -578,50 +394,10 @@ describe.each([
         [
             {child: {test: 'foo'}}, {child: {'test': 'apple'}},
         ],
-        false,
         [
             {child: {test: 'foo'}},
         ],
-        'ChildAttr filter',
-    ],
-    [
-        [
-            {
-                field: 'children',
-                type: 'childArrayAttr',
-                data: {
-                    child: {
-                        field: 'test',
-                        type: 'strict',
-                        value: 'foo',
-                    },
-                },
-            },
-        ],
-        [
-            {children: [{test: 'foo'}, {test: 'banana'}]}, {children: [{'test': 'apple'}]},
-        ],
-        false,
-        [
-            {children: [{test: 'foo'}, {test: 'banana'}]},
-        ],
-        'ChildArrayAttr filter',
-    ],
-    [
-        [
-            {
-                'field': 'children',
-                'type': 'childArrayAttr',
-            },
-        ],
-        [
-            {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
-        ],
-        false,
-        [
-            {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
-        ],
-        'ChildArrayAttr filter is skipped when data not set',
+        'works as intended',
     ],
     [
         [
@@ -633,11 +409,10 @@ describe.each([
         [
             {child: {test: 'foo'}}, {child: {'test': 'apple'}},
         ],
-        false,
         [
             {child: {test: 'foo'}}, {child: {'test': 'apple'}},
         ],
-        'ChildAttr filter is skipped when data not set',
+        'skipped when no data is set',
     ],
     [
         [
@@ -662,31 +437,288 @@ describe.each([
         [
             {child: {test: {testSquared: 'foo'}}}, {child: {'test': {testSquared: 'apple'}}},
         ],
-        false,
         [
             {child: {test: {testSquared: 'foo'}}},
         ],
-        'Recursive childAttr filter',
+        'works recursively',
+    ],
+])('test childAttr filter', (filters, values, expected, name) => {
+    test(name, () => {
+        global.console.warn = jest.fn();
+        expect(applyFilters(filters, values, false)).toStrictEqual(expected);
+    });
+});
+
+describe.each([
+    [
+        [
+            {
+                field: 'children',
+                type: 'childArrayAttr',
+                data: {
+                    child: {
+                        field: 'test',
+                        type: 'strict',
+                        value: 'foo',
+                    },
+                },
+            },
+        ],
+        [
+            {children: [{test: 'foo'}, {test: 'banana'}]}, {children: [{'test': 'apple'}]},
+        ],
+        [
+            {children: [{test: 'foo'}, {test: 'banana'}]},
+        ],
+        'ChildArrayAttr filter',
     ],
     [
         [
             {
-                'field': 'banana',
-                'type': 'not implemented',
-                'value': 'foobar',
+                'field': 'children',
+                'type': 'childArrayAttr',
             },
         ],
         [
-            {'banana': 'test'},
+            {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
         ],
-        false,
         [
-            {'banana': 'test'},
+            {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
         ],
-        'Non implemented filter is skipped',
+        'ChildArrayAttr filter is skipped when data not set',
     ],
-])('test applyFilters', (filters, values, skipUndefined, expected, name) => {
+])('test childArrayAttr filter', (filters, values, expected, name) => {
     test(name, () => {
-        expect(applyFilters(filters, values, skipUndefined)).toStrictEqual(expected);
+        global.console.warn = jest.fn();
+        expect(applyFilters(filters, values, false)).toStrictEqual(expected);
+    });
+});
+
+describe.each([
+    [
+        [
+            {
+                'field': 'num',
+                'type': 'minNum',
+                'value': 1,
+            },
+        ],
+        [
+            {'num': 0}, {'num': 1}, {'num': 1000},
+        ],
+        [
+            {'num': 1},
+            {'num': 1000},
+        ],
+        'MinNum',
+    ],
+    [
+        [
+            {
+                'field': 'num',
+                'type': 'minNumber',
+                'value': 1,
+            },
+        ],
+        [
+            {'num': 0}, {'num': 1}, {'num': 1000},
+        ],
+        [
+            {'num': 1},
+            {'num': 1000},
+        ],
+        'MinNumber behaves just like minNum',
+    ],
+    [
+        [
+            {
+                'field': 'num',
+                'type': 'maxNum',
+                'value': 1,
+            },
+        ],
+        [
+            {'num': 0}, {'num': 1}, {'num': 1000},
+        ],
+        [
+            {'num': 0}, {'num': 1},
+        ],
+        'MaxNum',
+    ],
+    [
+        [
+            {
+                'field': 'num',
+                'type': 'maxNumber',
+                'value': 1,
+            },
+        ],
+        [
+            {'num': 0}, {'num': 1}, {'num': 1000},
+        ],
+        [
+            {'num': 0}, {'num': 1},
+        ],
+        'MaxNumber behaves just like maxNum',
+    ],
+])('Test number filter', (filters, values, expected, name) => {
+    test(name, () => {
+        expect(applyFilters(filters, values, false)).toStrictEqual(expected);
+    });
+});
+
+describe.each([
+    [
+        [
+            {
+                'field': 'bool',
+                'type': 'strict',
+                'value': false,
+            },
+        ],
+        [
+            {'bool': true}, {'bool': false}, {'bool': 'banana'}, {'bool': 'true'},
+        ],
+        [
+            {'bool': false},
+        ],
+        'Strict equality',
+    ],
+    [
+        [
+            {
+                'field': 'bool',
+                'type': 'laxTrue',
+            },
+        ],
+        [
+            {'bool': true}, {'bool': false}, {'bool': 'banana'}, {'bool': 'true'}, {'bool': null},
+        ],
+        [
+            {'bool': true}, {'bool': 'banana'}, {'bool': 'true'},
+        ],
+        'Lax true',
+    ],
+    [
+        [
+            {
+                'field': 'bool',
+                'type': 'laxFalse',
+            },
+        ],
+        [
+            {'bool': true}, {'bool': false}, {'bool': 'banana'}, {'bool': 'true'}, {'bool': null}, {'bool': 'false'},
+        ],
+        [
+            {'bool': false}, {'bool': null},
+        ],
+        'Lax false',
+    ],
+])('Test boolean filters', (filters, values, expected, name) => {
+    test(name, () => {
+        expect(applyFilters(filters, values, false)).toStrictEqual(expected);
+    });
+});
+
+describe.each([
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'existence',
+                'value': true,
+            },
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        [
+            {'test': true},
+        ],
+        'Existence filter with bool value true',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'existence',
+                'value': false,
+            },
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        [
+            {'banana': false},
+        ],
+        'Existence filter with bool value false',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'existence',
+                'value': [false],
+            },
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        [
+            {'banana': false},
+        ],
+        'Existence filter with array value false',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'existence',
+                'value': [true],
+            },
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        [
+            {'test': true},
+        ],
+        'Existence filter with array value true',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'existence',
+                'value': [true, false],
+            },
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        'Existence filter with array value all allowed',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'existence',
+                'value': ['_any'],
+            },
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        'Existence filter with array value _any all allowed',
+    ],
+])('Test existence filters', (filters, values, expected, name) => {
+    test(name, () => {
+        expect(applyFilters(filters, values, false)).toStrictEqual(expected);
     });
 });
