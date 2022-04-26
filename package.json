@@ -5,12 +5,14 @@
   "private": false,
   "main": "dist/filterHelper.js",
   "sideEffects": false,
+  "jsnext:main": "src/filterHelper.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/binary-butterfly/butterflyDataFilters.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
     "prepublishOnly": "webpack --mode=production",
