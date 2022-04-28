@@ -95,7 +95,7 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
             }
             break;
         case ('array'):
-            if (filter.value[0] !== '_any' && filter.value.indexOf(value) === -1) {
+            if (filter.value !== '_any' && filter.value[0] !== '_any' && filter.value.indexOf(value) === -1) {
                 return false;
             }
             break;

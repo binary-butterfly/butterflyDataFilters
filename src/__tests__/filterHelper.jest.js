@@ -728,8 +728,24 @@ describe.each([
         [
             {'test': true}, {'banana': false},
         ],
-        'array value _any all allowed',
+        'array value [_any] all allowed',
     ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'existence',
+                'value': '_any',
+            },
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        [
+            {'test': true}, {'banana': false},
+        ],
+        'array value _any all allowed',
+    ]
 ])('Test existence filters', (filters, values, expected, name) => {
     test(name, () => {
         expect(applyFilters(filters, values, false)).toStrictEqual(expected);
