@@ -2,6 +2,9 @@
 
 A simple library for data filtering in JavaScript.
 
+[![.github/workflows/test.yml](https://github.com/binary-butterfly/butterflyDataFilters/actions/workflows/test.yml/badge.svg)](https://github.com/binary-butterfly/butterflyDataFilters/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/binary-butterfly/butterflyDataFilters/badge.svg?branch=main)](https://coveralls.io/github/binary-butterfly/butterflyDataFilters?branch=main)
+
 ## Motivation
 
 We needed a simple, yet expandable way to filter locally cached data in a single page application.  
