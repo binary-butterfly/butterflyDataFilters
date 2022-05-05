@@ -475,7 +475,8 @@ describe.each([
             },
         ],
         [
-            {children: [{test: 'foo'}, {test: 'banana'}]}, {children: [{'test': 'apple'}]},
+            {children: [{test: 'foo'}, {test: 'banana'}]},
+            {children: [{test: 'apple'}]},
         ],
         [
             {children: [{test: 'foo'}, {test: 'banana'}]},
@@ -502,9 +503,39 @@ test('test childArrayAttr filter is skipped when no data set', () => {
                 {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
             ]))
         .toStrictEqual([
-            {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
+            {children: [{test: 'foo'}]},
+            {children: [{test: 'apple'}]},
         ]);
     expect(warn).toHaveBeenCalledTimes(2);
+});
+
+describe.each([
+    [true, [{bla: 'bla', children: []}], 'returns dataset when skipUndefined is true'],
+    [false, [], 'dies not return data when skipUndefined is false'],
+])('Test skipUndefined and childArrayAttributes with empty children field', (skipUndefined, expected, name) => {
+    test(name, () => {
+        expect(
+            applyFilters(
+                [
+                    {
+                        field: 'children',
+                        type: 'childArrayAttr',
+                        data: {
+                            child: {
+                                field: 'test',
+                                type: 'strict',
+                                value: 'foo',
+                            },
+                        },
+                    },
+                ],
+                [{
+                    bla: 'bla',
+                    children: [],
+                }],
+                skipUndefined),
+        ).toStrictEqual(expected);
+    });
 });
 
 describe.each([
@@ -691,7 +722,7 @@ describe.each([
             },
         ],
         [
-            {'test': true}, {'banana': false}, {'test': ''}
+            {'test': true}, {'banana': false}, {'test': ''},
         ],
         [
             {'test': true},
@@ -745,7 +776,7 @@ describe.each([
             {'test': true}, {'banana': false},
         ],
         'array value _any all allowed',
-    ]
+    ],
 ])('Test existence filters', (filters, values, expected, name) => {
     test(name, () => {
         expect(applyFilters(filters, values, false)).toStrictEqual(expected);
