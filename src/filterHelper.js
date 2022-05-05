@@ -73,7 +73,7 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
         return true;
     }
 
-    const value = valueRow[filter.field];
+    const value = valueRow?.[filter.field];
     if (value === undefined) {
         if (filter.type === 'existence') {
             if (typeof filter.value === 'boolean' && filter.value === true) {
@@ -165,6 +165,11 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
                 console.warn('Filter has childArrayAttr type but no data set. Ignoring filter.');
                 return true;
             }
+
+            if (skipUndefined && !value?.length) {
+                return true;
+            }
+            
             const childFilters = [buildChildFilter(filter)];
             return applyFilters(childFilters, value, skipUndefined).length > 0;
         default:
