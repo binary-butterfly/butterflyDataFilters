@@ -82,6 +82,17 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
                 return false;
             }
             return true;
+        } else if (filter.type === 'emptiness') {
+            let filterVal;
+            if (typeof filter.value === 'boolean') {
+                filterVal = filter.value;
+            } else if (filter.value.length === 1) {
+                filterVal = filter.value[0];
+            }
+
+            if (filterVal !== undefined) {
+                return filterVal;
+            }
         } else {
             return !!skipUndefined;
         }
@@ -152,6 +163,22 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
                 }
             }
             break;
+        case ('emptiness'):
+            let filterVal;
+            if (typeof filter.value === 'boolean') {
+                filterVal = filter.value;
+            } else if (filter.value.length === 1) {
+                filterVal = filter.value[0];
+            }
+
+            if (filterVal !== undefined) {
+                if ((filterVal === true && !(value === null || value === '' || value?.length === 0))
+                    || (filterVal === false && (value === '' || value === null || value?.length === 0))) {
+                    return false;
+                }
+            }
+
+            break;
         case('childAttr'):
             if (!filter.data || !filter.data.child) {
                 console.warn('Filter has childAttr type but no data set. Ignoring filter.');
@@ -169,7 +196,7 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
             if (skipUndefined && !value?.length) {
                 return true;
             }
-            
+
             const childFilters = [buildChildFilter(filter)];
             return applyFilters(childFilters, value, skipUndefined).length > 0;
         default:

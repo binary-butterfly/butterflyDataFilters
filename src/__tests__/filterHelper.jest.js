@@ -782,3 +782,106 @@ describe.each([
         expect(applyFilters(filters, values, false)).toStrictEqual(expected);
     });
 });
+
+describe.each([
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'emptiness',
+                'value': '_any',
+            },
+        ],
+        [
+            {'test': []}, {'test': ['bla']}, {}
+        ],
+        [
+            {'test': []}, {'test': ['bla']}, {}
+        ],
+        'array value _any all allowed',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'emptiness',
+                'value': true,
+            },
+        ],
+        [
+            {'test': []}, {'test': ['bla']}, {}
+        ],
+        [
+            {'test': []}, {}
+        ],
+        'boolean true works',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'emptiness',
+                'value': false,
+            },
+        ],
+        [
+            {'test': []}, {'test': ['bla']}, {}
+        ],
+        [
+            {'test': ['bla']},
+        ],
+        'boolean false works',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'emptiness',
+                'value': [false],
+            },
+        ],
+        [
+            {'test': []}, {'test': ['bla']}, {'test': ''}, {'test': null}, {'test': true}, {}
+        ],
+        [
+            {'test': ['bla']}, {'test': true},
+        ],
+        'array false works',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'emptiness',
+                'value': [true],
+            },
+        ],
+        [
+            {'test': []}, {'test': ['bla']}, {'test': ''}, {'test': null}, {'test': true}, {}
+        ],
+        [
+            {'test': []}, {'test': ''}, {'test': null}, {}
+        ],
+        'array true works',
+    ],
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'emptiness',
+                'value': [true, false],
+            },
+        ],
+        [
+            {'test': []}, {'test': ['bla']},
+        ],
+        [
+            {'test': []}, {'test': ['bla']},
+        ],
+        'array value [true, false] all allowed',
+    ],
+])('Test emptiness filters', (filters, values, expected, name) => {
+    test(name, () => {
+        expect(applyFilters(filters, values)).toStrictEqual(expected);
+    });
+});
