@@ -1,4 +1,4 @@
-export const availableFilterTypes = ['childAttr', 'childArrayAttr', 'existence', 'string', 'array', 'minDate', 'maxDate', 'dateRange', 'minNum', 'minNumber', 'maxNumber', 'maxNum', 'strict', 'laxTrue', 'laxFalse', 'emptyness'];
+export const availableFilterTypes = ['childAttr', 'childArrayAttr', 'existence', 'string', 'array', 'minDate', 'maxDate', 'dateRange', 'minNum', 'minNumber', 'maxNumber', 'maxNum', 'strict', 'laxTrue', 'laxFalse', 'emptiness'];
 
 const convertIntoDateIfNotObject = (value) => {
     return typeof value === 'object' ? value : new Date(value);
