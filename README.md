@@ -186,6 +186,25 @@ Note that this filter overrides the `skipUnset` param.
 You can also pass the array `[true, false]` or `[_any]` to this filter to effectively skip it.  
 This is useful when using material-ui multi selects.
 
+### Emptiness check filter
+
+Use this filter to search for datasets that have an empty value set for searchField.
+Note that this filter overrides the `skipUnset` param.
+
+```
+{
+    'field': 'test',
+    'type': 'emptiness',
+    'value': [true, false]
+}
+```
+
+You can pass either a boolean or an array that contains one or two booleans or the string `_any`.  
+Pass `true` to only get fields with an emtpy value and `false` for fields with non empty values.  
+In this regard, the filter works exactly opposite to the existence filter.
+
+Note that this filter will not work as expected for object children as they are always considered non empty.
+
 ### Child attribute filters
 
 With the childAttr filter type, you can search child fields recursively like this:
