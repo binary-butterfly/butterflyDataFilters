@@ -793,10 +793,10 @@ describe.each([
             },
         ],
         [
-            {'test': []}, {'test': ['bla']}, {}
+            {'test': []}, {'test': ['bla']}, {},
         ],
         [
-            {'test': []}, {'test': ['bla']}, {}
+            {'test': []}, {'test': ['bla']}, {},
         ],
         'array value _any all allowed',
     ],
@@ -809,10 +809,10 @@ describe.each([
             },
         ],
         [
-            {'test': []}, {'test': ['bla']}, {}
+            {'test': []}, {'test': ['bla']}, {},
         ],
         [
-            {'test': []}, {}
+            {'test': []}, {},
         ],
         'boolean true works',
     ],
@@ -825,7 +825,7 @@ describe.each([
             },
         ],
         [
-            {'test': []}, {'test': ['bla']}, {}
+            {'test': []}, {'test': ['bla']}, {},
         ],
         [
             {'test': ['bla']},
@@ -841,7 +841,7 @@ describe.each([
             },
         ],
         [
-            {'test': []}, {'test': ['bla']}, {'test': ''}, {'test': null}, {'test': true}, {}
+            {'test': []}, {'test': ['bla']}, {'test': ''}, {'test': null}, {'test': true}, {},
         ],
         [
             {'test': ['bla']}, {'test': true},
@@ -857,10 +857,10 @@ describe.each([
             },
         ],
         [
-            {'test': []}, {'test': ['bla']}, {'test': ''}, {'test': null}, {'test': true}, {}
+            {'test': []}, {'test': ['bla']}, {'test': ''}, {'test': null}, {'test': true}, {},
         ],
         [
-            {'test': []}, {'test': ''}, {'test': null}, {}
+            {'test': []}, {'test': ''}, {'test': null}, {},
         ],
         'array true works',
     ],
@@ -881,6 +881,30 @@ describe.each([
         'array value [true, false] all allowed',
     ],
 ])('Test emptiness filters', (filters, values, expected, name) => {
+    test(name, () => {
+        expect(applyFilters(filters, values)).toStrictEqual(expected);
+    });
+});
+
+describe.each([
+    [
+        [
+            {
+                'field': 'test',
+                'type': 'lax',
+                'value': 1,
+            },
+        ],
+        [
+            {test: '1'}, {test: 1}, {test: '2'}, {test: 2}, {test: true}, {test: false},
+        ],
+        [
+            {test: '1'}, {test: 1}, {test: true},
+        ],
+        'works as intended',
+    ],
+])
+('Test lax filter', (filters, values, expected, name) => {
     test(name, () => {
         expect(applyFilters(filters, values)).toStrictEqual(expected);
     });
