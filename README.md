@@ -148,6 +148,20 @@ Use this filter to search for strict equality:
 },
 ```
 
+### Lax equality filters
+
+Use this filter to search for lax equality:
+
+```
+{
+  'field': 'searchField',
+  'type': 'strict',
+  'value': 123,
+},
+```
+
+Note that you should not use this if it can be helped because it will lead to potentially unexpected results due to type coercion.
+
 ### Lax truthiness filters
 
 Use this filter to search for datasets that have a truthy value as searchField

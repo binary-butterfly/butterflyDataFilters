@@ -142,6 +142,11 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
                 return false;
             }
             break;
+        case ('lax'):
+            if (value != filter.value) {
+                return false;
+            }
+            break;
         case ('laxTrue'):
             if (!value) {
                 return false;
