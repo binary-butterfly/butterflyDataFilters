@@ -3,7 +3,8 @@
   "version": "0.4.2",
   "license": "MIT",
   "private": false,
-  "main": "dist/filterHelper.js",
+  "main": "dist/umd/butterflyDataFilters.js",
+  "module": "dist/esm/index.mjs",
   "sideEffects": false,
   "jsnext:main": "src/filterHelper.js",
   "repository": {
@@ -15,7 +16,7 @@
     "src"
   ],
   "scripts": {
-    "prepublishOnly": "webpack --mode=production",
+    "prepublishOnly": "NODE_ENV=production rollup -c rollup.config.js",
     "test": "jest --config jest.config.js",
     "coverage": "jest --collectCoverage --config jest.config.js"
   },
@@ -25,11 +26,11 @@
   "devDependencies": {
     "@babel/core": "^7.10",
     "@babel/preset-env": "^7.10",
-    "babel-loader": "^8.2.2",
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-replace": "^4.0.0",
     "jest": "^27.0.6",
     "jest-junit": "^13.0.0",
-    "webpack": "^5.37.0",
-    "webpack-cli": "^4.7.0"
+    "rollup": "^2.75.6"
   },
   "browserslist": {
     "production": [
@@ -53,5 +54,8 @@
     "data",
     "filters"
   ],
-  "author": "binary butterfly GmbH"
+  "author": "binary butterfly GmbH",
+  "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.18.5"
+  }
 }
