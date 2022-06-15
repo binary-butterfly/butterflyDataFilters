@@ -224,3 +224,5 @@ export const applyFilters = (filters, values, skipUndefined = true) => {
         return true;
     });
 };
+
+export default applyFilters;
