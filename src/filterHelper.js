@@ -3,14 +3,14 @@ export const availableFilterTypes = ['childAttr', 'childArrayAttr', 'existence',
 const convertIntoDateIfNotObject = (value) => {
     return typeof value === 'object' ? value : new Date(value);
 };
+
 const numSafeToLowerCase = (input) => {
     input += '';
     return input.toLowerCase();
 };
 
-const checkDateRangeFilter = (filter, value) => {
-    let from;
-    let until;
+export const convertDateRangeValueToBeComparable = (filter) => {
+    let from, until;
     const today = new Date();
     today.setHours(0);
     today.setMinutes(0);
@@ -54,9 +54,15 @@ const checkDateRangeFilter = (filter, value) => {
             console.error('Filter date range ' + filter.value + ' not implemented. Skipping filter.');
             return true;
     }
+    return [from, until];
+};
 
-    return (from <= value && until >= value);
-
+const checkDateRangeFilter = (filter, value) => {
+    const comparable = convertDateRangeValueToBeComparable(filter);
+    if (comparable === true) {
+        return true;
+    }
+    return (comparable[0] <= value && comparable[1] >= value);
 };
 
 const buildChildFilter = (filter) => {

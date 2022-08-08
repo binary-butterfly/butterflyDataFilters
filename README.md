@@ -258,6 +258,18 @@ fits the filter.
 },
 ```
 
+## Helper functions
+
+### convertDateRangeValueToBeComparable
+
+This function is used internally to convert a DateRange filter to a `from` and `until` Date object with which values
+can be compared.  
+It is also exported by the library since it may be useful in some cases.
+
+This function requires the filter value and data within an object as param.  
+It will either return an array with from and until values or `true` if the filter should always return true for the given
+value.
+
 ## Known issues
 
 Currently, idea IDEs refuse to autocomplete anything imported from this package and mark any usages as unresolvable.  
