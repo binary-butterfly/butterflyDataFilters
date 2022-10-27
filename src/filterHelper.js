@@ -43,6 +43,11 @@ export const convertDateRangeValueToBeComparable = (filter) => {
         case ('custom'):
             from = new Date(filter.data.from);
             until = new Date(filter.data.until);
+
+            // Ignore filter if from or until are malformed
+            if (isNaN(from) || isNaN(until)) {
+                return true;
+            }
             until.setHours(23);
             until.setMinutes(59);
             until.setSeconds(59);
