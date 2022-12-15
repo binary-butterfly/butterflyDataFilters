@@ -1,0 +1,4 @@
+extends:
+  - "@binary-butterfly/eslint-config"
+env:
+  jest: true
