@@ -40,8 +40,7 @@ test('Test non implemented filter is skipped with warning', () => {
             [
                 {'banana': 'test'},
             ],
-            false),
-    )
+            false))
         .toStrictEqual([
             {'banana': 'test'},
         ]);
@@ -420,9 +419,8 @@ test('test date filter DateRange skipped when value not implemented', () => {
             [
                 {'date': now},
                 {'date': new Date('2020-01-01')},
-            ],
-        ))
-        .toStrictEqual(
+            ])
+    ).toStrictEqual(
             [
                 {'date': now},
                 {'date': new Date('2020-01-01')},
@@ -500,7 +498,8 @@ test('test childAttr filter is skipped when no data is set', () => {
             ],
             [
                 {child: {test: 'foo'}}, {child: {'test': 'apple'}},
-            ]))
+            ])
+    )
         .toStrictEqual([
             {child: {test: 'foo'}}, {child: {'test': 'apple'}},
         ]);
@@ -549,7 +548,8 @@ test('test childArrayAttr filter is skipped when no data set', () => {
             ],
             [
                 {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
-            ]))
+            ])
+    )
         .toStrictEqual([
             {children: [{test: 'foo'}]},
             {children: [{test: 'apple'}]},
@@ -581,7 +581,8 @@ describe.each([
                     bla: 'bla',
                     children: [],
                 }],
-                skipUndefined),
+                skipUndefined
+            ),
         ).toStrictEqual(expected);
     });
 });
@@ -951,8 +952,7 @@ describe.each([
         ],
         'works as intended',
     ],
-])
-('Test lax filter', (filters, values, expected, name) => {
+])('Test lax filter', (filters, values, expected, name) => {
     test(name, () => {
         expect(applyFilters(filters, values)).toStrictEqual(expected);
     });

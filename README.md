@@ -16,7 +16,7 @@ the open source community in hopes that someone else may benefit from it as well
 
 ## How does it work?
 
-For direct examples, check out src/__tests__/filterHelper.jest.js since it shows all ways the filters can be used.
+For direct examples, check out src/__tests__/filterHelper.test.js since it shows all ways the filters can be used.
 
 * Install the library using `npm save --dev butterfly-data-filters`
 * Add `import {applyFilters} from 'butterfly-data-filters';` where you want to use the filters

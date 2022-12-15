@@ -32,7 +32,7 @@ const config = {
             'process.env.NODE_ENV': JSON.stringify(env === 'production' ? 'production' : 'development'),
             'preventAssignment': true,
         }),
-    ]
+    ],
 };
 
 export default config;

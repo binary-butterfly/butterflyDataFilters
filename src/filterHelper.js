@@ -110,65 +110,76 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
     }
 
     switch (filter.type) {
-        case ('string'):
+        case ('string'): {
             const lowerCaseValue = numSafeToLowerCase(value);
             if (lowerCaseValue.search(numSafeToLowerCase(filter.value)) === -1) {
                 return false;
             }
             break;
-        case ('array'):
+        }
+        case ('array'): {
             if (filter.value !== '_any' && filter.value[0] !== '_any' && filter.value.indexOf(value) === -1) {
                 return false;
             }
             break;
-        case ('minDate'):
+        }
+        case ('minDate'): {
             if (new Date(filter.value) > convertIntoDateIfNotObject(value)) {
                 return false;
             }
             break;
-        case ('maxDate'):
+        }
+        case ('maxDate'): {
             if (new Date(filter.value) < convertIntoDateIfNotObject(value)) {
                 return false;
             }
             break;
-        case ('dateRange'):
+        }
+        case ('dateRange'): {
             if (!checkDateRangeFilter(filter, convertIntoDateIfNotObject(value))) {
                 return false;
             }
             break;
+        }
         case('minNumber'):
-        case ('minNum'):
+        case ('minNum'): {
             if (value < filter.value) {
                 return false;
             }
             break;
+        }
         case('maxNumber'):
-        case ('maxNum'):
+        case ('maxNum'): {
             if (value > filter.value) {
                 return false;
             }
             break;
-        case ('strict'):
+        }
+        case ('strict'): {
             if (value !== filter.value) {
                 return false;
             }
             break;
-        case ('lax'):
+        }
+        case ('lax'): {
             if (value != filter.value) {
                 return false;
             }
             break;
-        case ('laxTrue'):
+        }
+        case ('laxTrue'): {
             if (!value) {
                 return false;
             }
             break;
-        case ('laxFalse'):
+        }
+        case ('laxFalse'): {
             if (value) {
                 return false;
             }
             break;
-        case ('existence'):
+        }
+        case ('existence'): {
             if (typeof filter.value === 'boolean') {
                 if ((filter.value === false && !(value === null || value === '')) || (filter.value === true && value === '')) {
                     return false;
@@ -179,7 +190,8 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
                 }
             }
             break;
-        case ('emptiness'):
+        }
+        case ('emptiness'): {
             let filterVal;
             if (typeof filter.value === 'boolean') {
                 filterVal = filter.value;
@@ -195,7 +207,8 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
             }
 
             break;
-        case('childAttr'):
+        }
+        case('childAttr'): {
             if (!filter.data || !filter.data.child) {
                 console.warn('Filter has childAttr type but no data set. Ignoring filter.');
                 return true;
@@ -203,7 +216,8 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
 
             const childFilter = buildChildFilter(filter);
             return checkFilter(childFilter, value, skipUndefined);
-        case('childArrayAttr'):
+        }
+        case('childArrayAttr'): {
             if (!filter.data || !filter.data.child) {
                 console.warn('Filter has childArrayAttr type but no data set. Ignoring filter.');
                 return true;
@@ -215,8 +229,10 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
 
             const childFilters = [buildChildFilter(filter)];
             return applyFilters(childFilters, value, skipUndefined).length > 0;
-        default:
+        }
+        default: {
             console.warn('Filter type not implemented: ' + filter.type + '. Ignoring filter.');
+        }
     }
     return true;
 };

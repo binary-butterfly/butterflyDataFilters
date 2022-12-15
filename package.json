@@ -27,6 +27,7 @@
     "@babel/core": "^7.10",
     "@babel/plugin-transform-runtime": "^7.18.5",
     "@babel/preset-env": "^7.10",
+    "@binary-butterfly/eslint-config": "^0.0.6",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-replace": "^4.0.0",
     "jest": "^27.0.6",
