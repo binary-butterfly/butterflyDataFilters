@@ -55,6 +55,48 @@ This filter will return all datasets where `searchField` is either `honk` or `go
 You can also pass `['_any']` or just the string `_any` as value to get all datasets and effectively skip this filter.  
 This is useful as a default value when you don't know what the possible filter options are in advance.
 
+### Array includes filters
+
+In order to filter your dataset for fields where an array field contains a certain value, you can use `arrayIncludes` filters:
+
+```
+{
+    field: 'searchField',
+    type: 'arrayIncludes',
+    value: 'banana',
+}
+```
+
+This filter will return all datasets where `searchField` is an array that includes the string `banana`.
+
+### Array includes array filters
+
+Similarly, you can search for fields where an array field contains any of a given list of values using `arrayIncludesArray` filters:
+
+```
+{
+    field: 'test',
+    type: 'arrayIncludesArray',
+    value: ['banana', 'apple'],
+}
+```
+
+This will return all datasets where `searchField` is an array that includes either `banana` or `apple` (or both).
+
+### Strict array includes array filters
+
+If you only want fields where an array field contains **all** of a given list of values, you can use `arrayIncludesArrayStrict` filters:
+
+```
+{
+    field: 'test',
+    type: 'arrayIncludesArrayStrict',
+    value: ['apple', 'banana'],
+}
+```
+
+This will only return datasets where `searchField` is an array that contains **both** `apple` and `banana`.
+
 ### Date filters
 
 There are a number of filters that allow you to search for datasets with specific date values.  

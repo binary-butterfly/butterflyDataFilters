@@ -1,12 +1,32 @@
-export const availableFilterTypes = ['childAttr', 'childArrayAttr', 'existence', 'string', 'array', 'minDate', 'maxDate', 'dateRange', 'minNum', 'minNumber', 'maxNumber', 'maxNum', 'strict', 'laxTrue', 'laxFalse', 'emptiness', 'lax'];
+export const availableFilterTypes = [
+    'childAttr',
+    'childArrayAttr',
+    'existence',
+    'string',
+    'array',
+    'minDate',
+    'maxDate',
+    'dateRange',
+    'minNum',
+    'minNumber',
+    'maxNumber',
+    'maxNum',
+    'strict',
+    'laxTrue',
+    'laxFalse',
+    'emptiness',
+    'lax',
+    'arrayIncludes',
+    'arrayIncludesArray',
+    'arrayIncludesArrayStrict',
+];
 
 const convertIntoDateIfNotObject = (value) => {
     return typeof value === 'object' ? value : new Date(value);
 };
 
 const numSafeToLowerCase = (input) => {
-    input += '';
-    return input.toLowerCase();
+    return String(input).toLowerCase();
 };
 
 export const convertDateRangeValueToBeComparable = (filter) => {
@@ -120,6 +140,44 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
         case ('array'): {
             if (filter.value !== '_any' && filter.value[0] !== '_any' && filter.value.indexOf(value) === -1) {
                 return false;
+            }
+            break;
+        }
+        case ('arrayIncludes'): {
+            if (value.indexOf(filter.value) === -1) {
+                return false;
+            }
+            break;
+        }
+        case ('arrayIncludesArray'): {
+            if (filter.value !== '_any' && filter.value[0] !== '_any') {
+                let found = false;
+                for (const filterValue of filter.value) {
+                    if (value.indexOf(filterValue) !== -1) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    return false;
+                }
+            }
+            break;
+        }
+        case('arrayIncludesArrayStrict'): {
+            if (filter.value !== '_any' && filter.value[0] !== '_any') {
+                let lost = false;
+                for (const filterValue of filter.value) {
+                    if (value.indexOf(filterValue) === -1) {
+                        lost = true;
+                        break;
+                    }
+                }
+
+                if (lost) {
+                    return false;
+                }
             }
             break;
         }

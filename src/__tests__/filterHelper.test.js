@@ -31,16 +31,16 @@ test('Test non implemented filter is skipped with warning', () => {
     const warn = jest.fn();
     global.console.warn = warn;
     expect(applyFilters([
-                {
-                    'field': 'banana',
-                    'type': 'not implemented',
-                    'value': 'foobar',
-                },
-            ],
-            [
-                {'banana': 'test'},
-            ],
-            false))
+            {
+                'field': 'banana',
+                'type': 'not implemented',
+                'value': 'foobar',
+            },
+        ],
+        [
+            {'banana': 'test'},
+        ],
+        false))
         .toStrictEqual([
             {'banana': 'test'},
         ]);
@@ -419,13 +419,13 @@ test('test date filter DateRange skipped when value not implemented', () => {
             [
                 {'date': now},
                 {'date': new Date('2020-01-01')},
-            ])
+            ]),
     ).toStrictEqual(
-            [
-                {'date': now},
-                {'date': new Date('2020-01-01')},
-            ],
-        );
+        [
+            {'date': now},
+            {'date': new Date('2020-01-01')},
+        ],
+    );
     expect(error).toHaveBeenCalledTimes(2);
 });
 
@@ -498,7 +498,7 @@ test('test childAttr filter is skipped when no data is set', () => {
             ],
             [
                 {child: {test: 'foo'}}, {child: {'test': 'apple'}},
-            ])
+            ]),
     )
         .toStrictEqual([
             {child: {test: 'foo'}}, {child: {'test': 'apple'}},
@@ -548,7 +548,7 @@ test('test childArrayAttr filter is skipped when no data set', () => {
             ],
             [
                 {children: [{test: 'foo'}]}, {children: [{'test': 'apple'}]},
-            ])
+            ]),
     )
         .toStrictEqual([
             {children: [{test: 'foo'}]},
@@ -581,7 +581,7 @@ describe.each([
                     bla: 'bla',
                     children: [],
                 }],
-                skipUndefined
+                skipUndefined,
             ),
         ).toStrictEqual(expected);
     });
@@ -955,5 +955,114 @@ describe.each([
 ])('Test lax filter', (filters, values, expected, name) => {
     test(name, () => {
         expect(applyFilters(filters, values)).toStrictEqual(expected);
+    });
+});
+
+describe('Test arrayIncludes filter', () => {
+    it('works as intended', () => {
+        const filter = {
+            field: 'test',
+            type: 'arrayIncludes',
+            value: 'banana',
+        };
+        const input = [
+            {test: ['apple', 'cranberry']},
+            {test: ['banana', 'cranberry']},
+        ];
+        const expected = [
+            {test: ['banana', 'cranberry']},
+        ];
+
+        expect(applyFilters([filter], input)).toStrictEqual(expected);
+    });
+});
+
+describe('Test arrayIncludesArray filter', () => {
+    it('returns data that matches at least one of the given values', () => {
+        const filter = {
+            field: 'test',
+            type: 'arrayIncludesArray',
+            value: ['banana', 'apple'],
+        };
+        const input = [
+            {test: ['banana', 'cranberry']},
+            {test: ['apple', 'potato']},
+            {test: ['foo', 'bar']},
+            {test: ['apple', 'banana', 'cranberry']},
+            {test: []},
+        ];
+        const expected = [
+            {test: ['banana', 'cranberry']},
+            {test: ['apple', 'potato']},
+            {test: ['apple', 'banana', 'cranberry']},
+        ];
+        expect(applyFilters([filter], input)).toStrictEqual(expected);
+    });
+
+    it('is skipped when value is _any', () => {
+        const filter = {
+            field: 'test',
+            type: 'arrayIncludesArray',
+            value: '_any',
+        };
+        const input = [
+            {test: ['bla']},
+        ];
+        expect(applyFilters([filter], input)).toStrictEqual(input);
+    });
+
+    it('is skipped when value is ["_any"]', () => {
+        const filter = {
+            field: 'test',
+            type: 'arrayIncludesArray',
+            value: ['_any'],
+        };
+        const input = [
+            {test: ['bla']},
+        ];
+        expect(applyFilters([filter], input)).toStrictEqual(input);
+    });
+});
+
+describe('Test arrayIncludesArrayStrict filter', () => {
+    it('returns only datasets where all search values are included', () => {
+        const filter = {
+            field: 'test',
+            type: 'arrayIncludesArrayStrict',
+            value: ['apple', 'banana'],
+        };
+        const input = [
+            {test: []},
+            {test: ['apple']},
+            {test: ['apple', 'banana', 'cranberry']},
+        ];
+        const expected = [
+            {test: ['apple', 'banana', 'cranberry']},
+        ];
+        expect(applyFilters([filter], input)).toStrictEqual(expected);
+    });
+
+    it('is skipped when value is _any', () => {
+        const filter = {
+            field: 'test',
+            type: 'arrayIncludesArrayStrict',
+            value: '_any',
+        };
+        const input = [
+            {test: ['bla']},
+        ];
+        expect(applyFilters([filter], input)).toStrictEqual(input);
+    });
+
+    it('is skipped when value is ["_any"]', () => {
+        const filter = {
+            field: 'test',
+            type: 'arrayIncludesArrayStrict',
+            value: ['_any'],
+        };
+        const input = [
+            {test: ['bla']},
+        ];
+        expect(applyFilters([filter], input)).toStrictEqual(input);
     });
 });
