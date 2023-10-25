@@ -93,14 +93,14 @@ const checkDateRangeFilter = (filter, value) => {
 
 export const checkDateTimeRangeValueToBeComparable = (filter) => {
     if (filter.value === '_any') {
-        return true;
+        return false;
     }
 
     const from = new Date(filter.data.from);
     const until = new Date(filter.data.until);
 
     if (isNaN(from) || isNaN(until)) {
-        return true;
+        return false;
     }
 
     return [from, until];
@@ -108,7 +108,7 @@ export const checkDateTimeRangeValueToBeComparable = (filter) => {
 
 const checkDateTimeRangeFilter = (filter, value) => {
     const comparable = checkDateTimeRangeValueToBeComparable(filter);
-    if (comparable === true) {
+    if (comparable === false) {
         return true;
     }
     return (comparable[0] <= value && comparable[1] >= value);
