@@ -399,6 +399,116 @@ describe.each([
         ],
         'DateRange check skipped if value = _any',
     ],
+    [
+        [
+            {
+                'field': 'date',
+                'type': 'dateTimeRange',
+                'value': '',
+                'data': {
+                    'from': '2020-01-01T00:00',
+                    'until': '2020-02-01T00:00',
+                },
+            },
+        ],
+        [
+            {'date': '2020-01-01T01:00'},
+            {'date': '2020-01-31T23:59'},
+            {'date': '2021-01-01T12:00'},
+        ],
+        [
+            {'date': '2020-01-01T01:00'},
+            {'date': '2020-01-31T23:59'},
+        ],
+        'DateTimeRange custom',
+    ],
+    [
+        [
+            {
+                'field': 'date',
+                'type': 'dateTimeRange',
+                'value': '',
+                'data': {
+                    'from': 'banana',
+                    'until': '2020-02-01T00:00',
+                },
+            },
+        ],
+        [
+            {'date': '2020-01-01T00:00'},
+            {'date': '2020-01-31T00:10'},
+            {'date': '2021-01-01T00:20'},
+        ],
+        [
+            {'date': '2020-01-01T00:00'},
+            {'date': '2020-01-31T00:10'},
+            {'date': '2021-01-01T00:20'},
+        ],
+        'DateTimeRange custom with malformed from',
+    ],
+    [
+        [
+            {
+                'field': 'date',
+                'type': 'dateTimeRange',
+                'value': '',
+                'data': {
+                    'from': '2020-02-01',
+                    'until': 'banana',
+                },
+            },
+        ],
+        [
+            {'date': '2020-01-01T00:01'},
+            {'date': '2020-01-31T00:02'},
+            {'date': '2021-01-01T00:03'},
+        ],
+        [
+            {'date': '2020-01-01T00:01'},
+            {'date': '2020-01-31T00:02'},
+            {'date': '2021-01-01T00:03'},
+        ],
+        'DateTimeRange custom with malformed until',
+    ],
+    [
+        [
+            {
+                'field': 'date',
+                'type': 'dateTimeRange',
+                'value': '_any',
+            },
+        ],
+        [
+            {'date': new Date('2021-01-01T00:00')},
+            {'date': new Date('2020-01-01T23:01')},
+        ],
+        [
+            {'date': new Date('2021-01-01T00:00')},
+            {'date': new Date('2020-01-01T23:01')},
+        ],
+        'DateTimeRange check skipped if value = _any',
+    ],
+    [
+        [
+            {
+                'field': 'date',
+                'type': 'dateTimeRange',
+                'data': {
+                    'from': '2020-01-01T00:00',
+                    'until': '2022-01-01T00:00',
+                },
+            },
+        ],
+        [
+            {'date': new Date('2021-01-01T00:00')},
+            {'date': new Date('2020-01-01T23:01')},
+        ],
+        [
+            {'date': new Date('2021-01-01T00:00')},
+            {'date': new Date('2020-01-01T23:01')},
+        ],
+        'DateTimeRange check ignores value if unset',
+    ],
 ])('test date filter', (filters, values, expected, name) => {
     test(name, () => {
         expect(applyFilters(filters, values, false)).toStrictEqual(expected);

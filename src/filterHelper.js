@@ -92,6 +92,10 @@ const checkDateRangeFilter = (filter, value) => {
 };
 
 export const checkDateTimeRangeValueToBeComparable = (filter) => {
+    if (filter.value === '_any') {
+        return true;
+    }
+
     const from = new Date(filter.data.from);
     const until = new Date(filter.data.until);
 
