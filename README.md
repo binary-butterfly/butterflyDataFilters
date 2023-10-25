@@ -154,6 +154,23 @@ Or a custom range like this:
 
 You can also skip dateRange checks by setting the value to `_any`.
 
+#### dateTimeRange
+
+This filter lets you specify different date-time ranges to search for.
+
+```
+{
+  'field': 'searchField',
+  'type': 'dateTimeRange',
+  'data': {
+      'from': '2020-01-01T01:00',
+      'until': '2020-02-01T23:00',
+  },
+},
+```
+
+You can also skip dateTimeRange checks by setting the `value` to `_any`.
+
 ### Minimum number filters
 
 You can filter for numeric numbers that are higher than a specified one like this:

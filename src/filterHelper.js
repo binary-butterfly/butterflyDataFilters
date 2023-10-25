@@ -7,6 +7,7 @@ export const availableFilterTypes = [
     'minDate',
     'maxDate',
     'dateRange',
+    'dateTimeRange',
     'minNum',
     'minNumber',
     'maxNumber',
@@ -89,6 +90,29 @@ const checkDateRangeFilter = (filter, value) => {
     }
     return (comparable[0] <= value && comparable[1] >= value);
 };
+
+export const checkDateTimeRangeValueToBeComparable = (filter) => {
+    if (filter.value === '_any') {
+        return false;
+    }
+
+    const from = new Date(filter.data.from);
+    const until = new Date(filter.data.until);
+
+    if (isNaN(from) || isNaN(until)) {
+        return false;
+    }
+
+    return [from, until];
+}
+
+const checkDateTimeRangeFilter = (filter, value) => {
+    const comparable = checkDateTimeRangeValueToBeComparable(filter);
+    if (comparable === false) {
+        return true;
+    }
+    return (comparable[0] <= value && comparable[1] >= value);
+}
 
 const buildChildFilter = (filter) => {
     return {
@@ -195,6 +219,12 @@ const checkFilter = (filter, valueRow, skipUndefined) => {
         }
         case ('dateRange'): {
             if (!checkDateRangeFilter(filter, convertIntoDateIfNotObject(value))) {
+                return false;
+            }
+            break;
+        }
+        case ('dateTimeRange'): {
+            if (!checkDateTimeRangeFilter(filter, convertIntoDateIfNotObject(value))) {
                 return false;
             }
             break;
