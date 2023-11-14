@@ -1,10 +1,11 @@
 import babel from '@rollup/plugin-babel';
 import replace from '@rollup/plugin-replace';
+import typescript from '@rollup/plugin-typescript';
 
 const env = process.env.NODE_ENV;
 
 const config = {
-    input: 'src/filterHelper.js',
+    input: 'src/filterHelper.ts',
     output: [
         {
             file: 'dist/umd/butterflyDataFilters.js',
@@ -12,7 +13,7 @@ const config = {
             sourcemap: true,
             name: 'ButterflyDataFilters',
             inlineDynamicImports: true,
-            exports: 'auto',
+            exports: 'named',
         },
         {
             file: 'dist/esm/index.mjs',
@@ -20,7 +21,7 @@ const config = {
             sourcemap: true,
             name: 'butterflyDataFilters',
             inlineDynamicImports: true,
-            exports: 'auto',
+            exports: 'named',
         },
     ],
     plugins: [
@@ -28,6 +29,7 @@ const config = {
             'babelHelpers': 'runtime',
             'exclude': 'node_modules/**',
         }),
+        typescript({tsconfig: './tsconfig.json'}),
         replace({
             'process.env.NODE_ENV': JSON.stringify(env === 'production' ? 'production' : 'development'),
             'preventAssignment': true,
