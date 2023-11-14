@@ -5,15 +5,20 @@
   "private": false,
   "main": "dist/umd/butterflyDataFilters.js",
   "module": "dist/esm/index.mjs",
+  "types": "dist/esm/types/src/filterHelper.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/umd/butterflyDataFilters.js"
+    }
+  },
   "sideEffects": false,
-  "jsnext:main": "src/filterHelper.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/binary-butterfly/butterflyDataFilters.git"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "prepublishOnly": "NODE_ENV=production rollup -c rollup.config.js",
