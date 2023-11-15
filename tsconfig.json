@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "lib": ["es6", "dom"],
+    "allowJs": true,
+    "target": "es5",
+    "allowSyntheticDefaultImports": true,
+    "rootDir": "./",
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "noImplicitReturns": true,
+    "moduleResolution": "Node",
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationDir": "./types"
+  },
+  "include": [
+    "./src/**/*"
+  ]
+}

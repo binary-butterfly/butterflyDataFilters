@@ -1,4 +1,6 @@
 extends:
   - "@binary-butterfly/eslint-config"
+rules:
+      deprecation/deprecation: off
 env:
   jest: true

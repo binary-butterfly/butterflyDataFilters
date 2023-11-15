@@ -1,24 +1,30 @@
 {
   "name": "butterfly-data-filters",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "license": "MIT",
   "private": false,
   "main": "dist/umd/butterflyDataFilters.js",
   "module": "dist/esm/index.mjs",
+  "types": "dist/esm/types/src/filterHelper.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.mjs",
+      "require": "./dist/umd/butterflyDataFilters.js"
+    }
+  },
   "sideEffects": false,
-  "jsnext:main": "src/filterHelper.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/binary-butterfly/butterflyDataFilters.git"
   },
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "prepublishOnly": "NODE_ENV=production rollup -c rollup.config.js",
     "test": "jest --config jest.config.js",
-    "coverage": "jest --collectCoverage --config jest.config.js"
+    "coverage": "jest --collectCoverage --config jest.config.js",
+    "typecheck": "tsc --noEmit"
   },
   "jest-junit": {
     "outputDirectory": "reports/"
@@ -27,9 +33,11 @@
     "@babel/core": "^7.10",
     "@babel/plugin-transform-runtime": "^7.18.5",
     "@babel/preset-env": "^7.10",
-    "@binary-butterfly/eslint-config": "^0.0.6",
+    "@babel/preset-typescript": "^7.23.3",
+    "@binary-butterfly/eslint-config": "^0.3.0",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-replace": "^4.0.0",
+    "@rollup/plugin-typescript": "^11.1.5",
     "jest": "^29",
     "jest-junit": "^13.0.0",
     "rollup": "^2.75.6"
