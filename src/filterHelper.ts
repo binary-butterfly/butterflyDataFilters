@@ -133,15 +133,32 @@ export const convertDateRangeValueToBeComparable = (filter: DateFilter) => {
             from = new Date(filter.data.from);
             until = new Date(filter.data.until);
 
-            // Ignore filter if from or until are malformed
+            // Ignore filter if from and until are malformed
             // @ts-ignore next
-            if (isNaN(from) || isNaN(until)) {
+            if (isNaN(from) && isNaN(until)) {
                 return true;
             }
-            until.setHours(23);
-            until.setMinutes(59);
-            until.setSeconds(59);
-            until.setMilliseconds(999);
+
+            // @ts-ignore
+            if (!isNaN(from)) {
+                from.setHours(0);
+                from.setMinutes(0);
+                from.setSeconds(0);
+                from.setMilliseconds(0);
+            } else {
+                from = '';
+            }
+
+            // @ts-ignore
+            if (!isNaN(until)) {
+                until.setHours(23);
+                until.setMinutes(59);
+                until.setSeconds(59);
+                until.setMilliseconds(999);
+            } else {
+                until = '';
+            }
+
             break;
         case ('_any'):
             return true;
@@ -157,7 +174,14 @@ const checkDateRangeFilter = (filter: DateFilter, value: string|number|Date) => 
     if (comparable === true) {
         return true;
     }
-    return (comparable[0] <= value && comparable[1] >= value);
+
+    if (comparable[0] === '') {
+        return comparable[1] >= value;
+    } else if (comparable[1] === '') {
+        return comparable[0] <= value;
+    } else {
+        return (comparable[0] <= value && comparable[1] >= value);
+    }
 };
 
 export const checkDateTimeRangeValueToBeComparable = (filter: DateTimeFilter) => {
@@ -165,12 +189,22 @@ export const checkDateTimeRangeValueToBeComparable = (filter: DateTimeFilter) =>
         return false;
     }
 
-    const from = new Date(filter.data.from);
-    const until = new Date(filter.data.until);
+    let from: string | Date = new Date(filter.data.from);
+    let until: string | Date = new Date(filter.data.until);
 
     // @ts-ignore next
-    if (isNaN(from) || isNaN(until)) {
+    if (isNaN(from) && isNaN(until)) {
         return false;
+    }
+
+    // @ts-ignore next
+    if (isNaN(from)) {
+        from = '';
+    }
+
+    // @ts-ignore next
+    if (isNaN(until)) {
+        until = '';
     }
 
     return [from, until];
@@ -181,7 +215,14 @@ const checkDateTimeRangeFilter = (filter: DateTimeFilter, value: string|number|D
     if (comparable === false) {
         return true;
     }
-    return (comparable[0] <= value && comparable[1] >= value);
+
+    if (comparable[0] === '') {
+        return comparable[1] >= value;
+    } else if (comparable[1] === '') {
+        return comparable[0] <= value;
+    } else {
+        return (comparable[0] <= value && comparable[1] >= value);
+    }
 };
 
 const buildChildFilter = (filter: ChildFilter) => {
