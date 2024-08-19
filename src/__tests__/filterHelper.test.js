@@ -383,6 +383,30 @@ describe.each([
             {
                 'field': 'date',
                 'type': 'dateRange',
+                'value': 'custom',
+                'data': {
+                    'from': '',
+                    'until': '',
+                },
+            },
+        ],
+        [
+            {'date': '2020-01-01'},
+            {'date': '2020-01-31'},
+            {'date': '2021-01-01'},
+        ],
+        [
+            {'date': '2020-01-01'},
+            {'date': '2020-01-31'},
+            {'date': '2021-01-01'},
+        ],
+        'DateRange custom with malformed from and until',
+    ],
+    [
+        [
+            {
+                'field': 'date',
+                'type': 'dateRange',
                 'value': '_any',
             },
         ],
@@ -463,6 +487,30 @@ describe.each([
             {'date': '2021-01-01T00:03'},
         ],
         'DateTimeRange custom with malformed until',
+    ],
+    [
+        [
+            {
+                'field': 'date',
+                'type': 'dateTimeRange',
+                'value': '',
+                'data': {
+                    'from': '',
+                    'until': '',
+                },
+            },
+        ],
+        [
+            {'date': '2020-01-01T00:01'},
+            {'date': '2020-01-31T00:02'},
+            {'date': '2021-01-01T00:03'},
+        ],
+        [
+            {'date': '2020-01-01T00:01'},
+            {'date': '2020-01-31T00:02'},
+            {'date': '2021-01-01T00:03'},
+        ],
+        'DateTimeRange custom with malformed from and until',
     ],
     [
         [
