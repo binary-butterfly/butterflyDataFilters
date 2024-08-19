@@ -1,6 +1,6 @@
 {
   "name": "butterfly-data-filters",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "license": "MIT",
   "private": false,
   "main": "dist/umd/butterflyDataFilters.js",
