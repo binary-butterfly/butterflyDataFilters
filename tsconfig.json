@@ -1,18 +1,19 @@
 {
   "compilerOptions": {
-    "lib": ["es6", "dom"],
+    "lib": ["ESNext", "dom"],
     "allowJs": true,
-    "target": "es5",
+    "target": "esnext",
     "allowSyntheticDefaultImports": true,
     "rootDir": "./",
     "sourceMap": true,
     "outDir": "dist",
+    "noEmit": true,
     "strict": true,
     "noImplicitReturns": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "nodenext",
+    "module": "nodenext",
     "skipLibCheck": true,
-    "declaration": true,
-    "declarationDir": "./types"
+    "declaration": false
   },
   "include": [
     "./src/**/*"
