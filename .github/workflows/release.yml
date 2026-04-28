@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 24
           cache: 'npm'
-      - run: npm install
+      - run: npm ci
       - run: npm run prepublishOnly
       - run: |
           if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
