@@ -1,18 +1,30 @@
+name: release
+
+permissions:
+  id-token: write
+  contents: read
+
 on:
   release:
     types:
       - published
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment: releases
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
+          cache: 'npm'
       - run: npm install
       - run: npm run prepublishOnly
-      - uses: JS-DevTools/npm-publish@v2
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+      - run: |
+          if [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
+            npm publish --tag next
+          else
+            npm publish
+          fi
