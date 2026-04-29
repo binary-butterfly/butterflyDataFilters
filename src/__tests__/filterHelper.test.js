@@ -29,8 +29,7 @@ describe.each([
 });
 
 test('Test non implemented filter is skipped with warning', () => {
-    const warn = vi.fn();
-    global.console.warn = warn;
+    const warn = vi.spyOn(console, 'warn');
     expect(applyFilters([
             {
                 'field': 'banana',
@@ -559,8 +558,7 @@ describe.each([
 });
 
 test('test date filter DateRange skipped when value not implemented', () => {
-    const error = vi.fn();
-    global.console.error = error;
+    const error = vi.spyOn(console, 'error');
     expect(
         applyFilters([
                 {
@@ -640,8 +638,7 @@ describe.each([
 });
 
 test('test childAttr filter is skipped when no data is set', () => {
-    const warn = vi.fn();
-    global.console.warn = warn;
+    const warn = vi.spyOn(console, 'warn');
     expect(
         applyFilters([
                 {
@@ -690,8 +687,7 @@ describe.each([
 });
 
 test('test childArrayAttr filter is skipped when no data set', () => {
-    const warn = vi.fn();
-    global.console.warn = warn;
+    const warn = vi.spyOn(console, 'warn');
     expect(
         applyFilters([
                 {
