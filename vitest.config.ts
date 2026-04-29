@@ -11,5 +11,6 @@ export default defineConfig({
             reportsDirectory: './reports',
         },
         outputFile: 'reports/unit.test.xml',
+        restoreMocks: true,
     },
 });
